@@ -11,7 +11,5 @@ Herramienta de auditoría automatizada por capas para infraestructura virtualiza
 - `docs/`: Plan VLSM, diagrama e informe técnico.
 - `evidencias/`: Reportes generados y registros de ejecución.
 
-## Despliegue y Ejecución
-1. Dar permisos de ejecución a los scripts:
-   ```bash
-   chmod +x *.sh
+
+
