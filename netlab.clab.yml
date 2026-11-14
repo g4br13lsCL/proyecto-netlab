@@ -1,0 +1,44 @@
+name: netlab
+topology:
+  nodes:
+    r1:
+      kind: linux
+      image: "frrouting/frr:latest"
+      binds:
+        - daemons:/etc/frr/daemons
+        - vtysh.conf:/etc/frr/vtysh.conf
+    r2:
+      kind: linux
+      image: "frrouting/frr:latest"
+      binds:
+        - daemons:/etc/frr/daemons
+        - vtysh.conf:/etc/frr/vtysh.conf
+    r3:
+      kind: linux
+      image: "frrouting/frr:latest"
+      binds:
+        - daemons:/etc/frr/daemons
+        - vtysh.conf:/etc/frr/vtysh.conf
+    pc-admin: { kind: linux, image: "alpine:latest" }
+    pc-ventas: { kind: linux, image: "alpine:latest" }
+    srv-web: { kind: linux, image: "alpine:latest" }
+    srv-datos: { kind: linux, image: "alpine:latest" }
+    externo: { kind: linux, image: "alpine:latest" }
+    sw-a: { kind: bridge }
+    sw-b: { kind: bridge }
+
+  links:
+    # Enlaces OSPF
+    - endpoints: ["r1:eth1", "r2:eth1"]
+    - endpoints: ["r1:eth2", "r3:eth1"]
+    - endpoints: ["r2:eth2", "r3:eth2"]
+    # Enlace a Internet
+    - endpoints: ["r1:eth3", "externo:eth1"]
+    # Conexiones Sede (sw-a)
+    - endpoints: ["pc-admin:eth1", "sw-a:swa-p1"]
+    - endpoints: ["pc-ventas:eth1", "sw-a:swa-p2"]
+    - endpoints: ["r2:eth3", "sw-a:swa-p3"]
+    # Conexiones Servidores (sw-b)
+    - endpoints: ["r1:eth4", "sw-b:swb-p1"]
+    - endpoints: ["srv-web:eth1", "sw-b:swb-p2"]
+    - endpoints: ["srv-datos:eth1", "sw-b:swb-p3"]
